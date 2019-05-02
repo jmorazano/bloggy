@@ -8,7 +8,7 @@ module.exports = {
   mongo: {
     user: process.env.MONGO_USER,
     password: process.env.MONGO_PASSWORD,
-    host: process.env.MONGO_HOST || 'mongo-local-bloggy',
+    host: process.env.MONGO_HOST || 'mongo-local-bloggy-all',
     database: process.env.MONGO_DATABASE || 'test',
     port: process.env.MONGO_PORT || '27017'
   }
