@@ -1,0 +1,35 @@
+version: "2"
+
+services:
+  mongodb:
+    container_name: mongo-local-bloggy
+    image: mongo:4.1
+    ports:
+      - "27016:27017"
+    restart: always
+
+  bloggy-backend:
+    container_name: bloggy-backend
+    restart: always
+    command: npm run start
+    build: ./backend
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend:/usr/src/app/backend/
+    ports:
+      - "4000:3000"
+      - "9228:9229"
+
+  bloggy-frontend:
+    container_name: bloggy-frontend
+    restart: always
+    command: npm run start
+    build: ./frontend
+    # depends_on:
+    #   - mongodb
+    volumes:
+      - ./frontend:/usr/src/app/frontend/
+    ports:
+      - "3000:3000"
+      - "9229:9229"
