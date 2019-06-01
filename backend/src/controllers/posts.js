@@ -1,20 +1,28 @@
 const Post = require('../models/Post')
 
-async function findAll (ctx) {
-  // Fetch all Post’s from the database and return as payload
+const findAll = async (ctx) => {
+  // console.log('---------------> Funca!', ctx)
   const posts = await Post.find({})
-  // ctx.body = posts
-  ctx.body = { message: 'greetings from you local API :P' }
+  ctx.body = posts
 }
 
-async function create (ctx) {
+const create = async (ctx) => {
   // Create New Post from payload sent and save to database
-  // const newPost = new Post(ctx.request.body)
-  // const savedPost = await newPost.save()
-  ctx.body = { message: 'greetings from you local API :P' }
+  try {
+    console.log('---------------> request body', ctx)
+    const newPost = await new Post(ctx.request.body)
+    console.log('---------------> saved post', ctx)
+    await newPost.save()
+    console.log('---------------> post to json!', ctx)
+    const postedJSON = newPost.toJSON()
+    console.log(postedJSON)
+    // ctx.body = { postedJSON }
+  } catch (err) {
+    ctx.throw(409)
+  }
 }
- 
-async function destroy (ctx) {
+
+const destroy = async (ctx) => {
   // Get id from url parameters and find Post in database
   const id = ctx.params.id
   const post = await Post.findById(id)
@@ -24,7 +32,7 @@ async function destroy (ctx) {
   ctx.body = deletedPost
 }
 
-async function update (ctx) {
+const update = async (ctx) => {
   // Find Post based on id, then toggle done on/off
   const id = ctx.params.id
   const post = await Post.findById(id)
