@@ -13,7 +13,7 @@ async function create (ctx) {
   // const savedPost = await newPost.save()
   ctx.body = { message: 'greetings from you local API :P' }
 }
-
+ 
 async function destroy (ctx) {
   // Get id from url parameters and find Post in database
   const id = ctx.params.id
