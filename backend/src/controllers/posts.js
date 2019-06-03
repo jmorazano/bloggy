@@ -1,7 +1,7 @@
 const Post = require('../models/Post')
 
 const findAll = async (ctx) => {
-  // console.log('---------------> Funca!', ctx)
+  console.log('--------------->  Lista los post!', ctx)
   const posts = await Post.find({})
   ctx.body = posts
 }
@@ -9,14 +9,14 @@ const findAll = async (ctx) => {
 const create = async (ctx) => {
   // Create New Post from payload sent and save to database
   try {
-    console.log('---------------> request body', ctx)
+    //   console.log('---------------> request body', ctx)
     const newPost = await new Post(ctx.request.body)
-    console.log('---------------> saved post', ctx)
+    //  console.log('---------------> saved post', ctx)
     await newPost.save()
-    console.log('---------------> post to json!', ctx)
+    // console.log('---------------> post to json!', ctx)
     const postedJSON = newPost.toJSON()
     console.log(postedJSON)
-    // ctx.body = { postedJSON }
+    ctx.body = { postedJSON }
   } catch (err) {
     ctx.throw(409)
   }
