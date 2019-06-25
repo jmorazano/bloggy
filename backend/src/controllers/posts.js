@@ -23,23 +23,19 @@ const create = async (ctx) => {
 }
 
 const destroy = async (ctx) => {
-  // Get id from url parameters and find Post in database
   const id = ctx.params.id
   const post = await Post.findById(id)
-
-  // Delete Post from database and return deleted object as reference
+  console.log(post)
+  console.log(id)
   const deletedPost = await post.remove()
   ctx.body = deletedPost
 }
 
 const update = async (ctx) => {
   // Find Post based on id, then toggle done on/off
-  const id = ctx.params.id
-  const post = await Post.findById(id)
-  post.done = !post.done
-
-  // Update Post in database
-  const updatedPost = await post.save()
+  const { id } = ctx.params
+  const updateObject = ctx.request.body
+  const updatedPost = await Post.findByIdAndUpdate(id, updateObject, { new: true })
   ctx.body = updatedPost
 }
 
