@@ -9,26 +9,25 @@ const findAll = async (ctx) => {
 const create = async (ctx) => {
   // Create New Post from payload sent and save to database
   try {
-    //   console.log('---------------> request body', ctx)
     const newPost = await new Post(ctx.request.body)
-    //  console.log('---------------> saved post', ctx)
     await newPost.save()
-    // console.log('---------------> post to json!', ctx)
-    const postedJSON = newPost.toJSON()
-    console.log(postedJSON)
-    ctx.body = { postedJSON }
+    ctx.body = newPost.toJSON()
   } catch (err) {
     ctx.throw(409)
   }
 }
 
 const destroy = async (ctx) => {
-  const id = ctx.params.id
-  const post = await Post.findById(id)
-  console.log(post)
-  console.log(id)
-  const deletedPost = await post.remove()
-  ctx.body = deletedPost
+  try {
+    const id = ctx.params.id
+    const post = await Post.findByIdAndRemove(id)
+    console.log(post)
+    console.log(id)
+    const deletedPost = await post.findByIdAndRemove()
+    ctx.body = deletedPost
+  } catch (err) {
+    ctx.throw(204)
+  }
 }
 
 const update = async (ctx) => {
