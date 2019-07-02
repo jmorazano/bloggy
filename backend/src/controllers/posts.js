@@ -9,7 +9,7 @@ const findAll = async (ctx) => {
 const create = async (ctx) => {
   // Create New Post from payload sent and save to database
   try {
-    const newPost = await new Post(ctx.request.body)
+    const newPost = new Post(ctx.request.body)
     await newPost.save()
     ctx.body = newPost.toJSON()
   } catch (err) {
@@ -20,11 +20,9 @@ const create = async (ctx) => {
 const destroy = async (ctx) => {
   try {
     const id = ctx.params.id
-    const post = await Post.findByIdAndRemove(id)
-    console.log(post)
-    console.log(id)
-    const deletedPost = await post.findByIdAndRemove()
-    ctx.body = deletedPost
+    await Post.findByIdAndRemove(id)
+    // ctx.body = id
+    console.log('deleted a post')
   } catch (err) {
     ctx.throw(204)
   }
