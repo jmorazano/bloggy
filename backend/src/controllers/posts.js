@@ -1,37 +1,60 @@
 const Post = require('../models/Post')
 
-async function findAll (ctx) {
-  // Fetch all Post’s from the database and return as payload
+const findAll = async (ctx) => {
+  console.log('--------------->  Lista los post!', ctx)
   const posts = await Post.find({})
-  // ctx.body = posts
-  ctx.body = { message: 'greetings from you local API :P' }
+  ctx.body = posts
 }
 
-async function create (ctx) {
+const create = async (ctx) => {
   // Create New Post from payload sent and save to database
-  // const newPost = new Post(ctx.request.body)
-  // const savedPost = await newPost.save()
-  ctx.body = { message: 'greetings from you local API :P' }
+  try {
+    console.log('ctx.request.body ----->', ctx.request.body)
+    const newPost = new Post(ctx.request.body)
+    await newPost.save()
+    ctx.body = newPost.toJSON()
+  } catch (err) {
+    ctx.throw(409)
+  }
 }
 
-async function destroy (ctx) {
-  // Get id from url parameters and find Post in database
-  const id = ctx.params.id
-  const post = await Post.findById(id)
-
-  // Delete Post from database and return deleted object as reference
-  const deletedPost = await post.remove()
-  ctx.body = deletedPost
+const destroy = async (ctx) => {
+  try {
+    const { id } = ctx.params
+    const deletedPost = await Post.findByIdAndRemove(id)
+    if (!deletedPost) {
+      throw new Error(`no post was found with id:${id}`)
+    }
+    console.log('deleted a post')
+    ctx.status = 202
+  } catch (err) {
+    console.log(err)
+    ctx.throw(500, err)
+    ctx.status = 501
+  }
 }
 
-async function update (ctx) {
+const destroyAll = async (ctx) => {
+  try {
+    const deletedPost = await Post.deleteMany()
+    if (!deletedPost) {
+      throw new Error(`no post was found with id:${id}`)
+    }
+    console.log('deleted all post')
+    ctx.status = 202
+  } catch (err) {
+    console.log(err)
+    ctx.throw(500, err)
+    ctx.status = 501
+  }
+}
+
+
+const update = async (ctx) => {
   // Find Post based on id, then toggle done on/off
-  const id = ctx.params.id
-  const post = await Post.findById(id)
-  post.done = !post.done
-
-  // Update Post in database
-  const updatedPost = await post.save()
+  const { id } = ctx.params
+  const updateObject = ctx.request.body
+  const updatedPost = await Post.findByIdAndUpdate(id, updateObject, { new: true })
   ctx.body = updatedPost
 }
 
@@ -39,5 +62,6 @@ module.exports = {
   findAll,
   create,
   destroy,
+  destroyAll,
   update
 }

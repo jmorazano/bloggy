@@ -16,7 +16,7 @@ services:
     depends_on:
       - mongodb
     volumes:
-      - ./backend:/usr/src/app/backend/
+      - ./backend:/usr/src/app/
     ports:
       - "4000:3000"
       - "9228:9229"
@@ -29,7 +29,7 @@ services:
     # depends_on:
     #   - mongodb
     volumes:
-      - ./frontend:/usr/src/app/frontend/
+      - ./frontend:/usr/src/app/
     ports:
       - "3000:3000"
       - "9229:9229"

@@ -6,6 +6,7 @@
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
   pointer-events: none;
+  -webkit-animation: App-logo-spin infinite 20s linear;
 }
 
 .App-header {
@@ -27,6 +28,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -35,30 +37,39 @@
 html {
   background-color: #222222;
 }
+
 body {
   background: cornflowerblue;
 }
+
 .post-item {
   text-align: left;
 }
+
 .error {
   color: crimson;
 }
+
 .white {
   color: white !important;
 }
+
 .checkbox {
   margin-right: 10px;
 }
+
 .completed {
   text-decoration-line: line-through;
 }
+
 .post-description {
   cursor: pointer;
 }
+
 .post-list {
   max-width: 400px !important;
 }
+
 .form {
   margin-bottom: 50px;
 }

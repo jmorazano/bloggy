@@ -1,56 +1,60 @@
 import React, { Component } from 'react'
-import config from './config'
-import { error } from 'util';
-
-const Post = ({ post, id }) => (
-  <div className="post-info">
-  </div>
-)
+// import config from './config'
+// import { error } from 'util';
 
 class Posts extends Component {
-  state = {
-    newPost: '',
-    posts: '',
-    error: '',
-    isLoading: false
-  }
+  constructor() {
+    super();
 
-  componentDidMount() {
-    this.fetchPosts()
-  }
-
-  fetchPosts () {
-    this.setState({ isLoading: true })
-    const uri = config.apiHost
-    // HTTP GET Request to our backend api and load into state
-    fetch(`${uri}/api/v1/posts`)
-      .then((res) => res.json())
-      .then(posts => this.setState({ isLoading: false, posts: posts.message }))
-      .catch((error) => this.setState({ error: error.message }))
-  }
-
-  addPost (event) {
-    event.preventDefault() // Prevent form from reloading page
-    const { newPost, posts } = this.state
-
-    if(newPost) {
-      this.setState({
-        newPost: '',
-        posts: posts.concat({ description: newPost, done: false })
-      })
+    this.state = {
+      title: '',
+      urltitle: '',
+      body: ''
     }
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  handleInputChange({ target }) {
+    const { name, value } = target;
+    this.setState({
+      [name]: value
+    });
+  }
+  
+  handleSubmit(event) {
+    event.preventDefault();
+    const data = {...this.state};
+    console.log(data)
+    fetch('http://localhost:4000/api/v1/posts', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      method: 'POST',
+    });
+  }
+  
+  
   render() {
-    let { posts, newPost, isLoading, error } = this.state
-
+    // console.log(this.state);
     return (
-      <div>
-        <h1 className="">Pooooooosts</h1>
-        <h1 className="">{error}</h1>
-        <h1 className="">{posts}</h1>
-        <button onClick={this.fetchPosts.bind(this)}>TEST FETCH API</button>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <label htmlFor="username">Title</label>
+       
+        <input id="title" value={this.state.title} onChange={this.handleInputChange} name="title" type="text" />
+
+        <label htmlFor="urltitle">URL</label>
+        <input id="urltitle" value={this.state.urltitle} onChange={this.handleInputChange} name="urltitle" type="text" />
+
+        <label htmlFor="postbody">Content</label>
+
+        <textarea id="postbody" value={this.state.body} onChange={this.handleInputChange} name="body" type="textarea" />
+
+        <button>Publish now</button>
+      </form>
     );
   }
 }
