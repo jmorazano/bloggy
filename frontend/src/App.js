@@ -1,7 +1,7 @@
 import React from 'react';
 import Posts from './Posts'
 import logo from './logo.svg';
-import './App.scss';
+import './App.css';
 
 function App() {
   return (
